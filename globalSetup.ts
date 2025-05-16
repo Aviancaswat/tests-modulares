@@ -1,15 +1,29 @@
 import fs from 'fs';
-import fetch from 'node-fetch'; 
+import fetch from 'node-fetch';
 
 export default async function globalSetup() {
     // Lista de proxies predefinidos
     const proxyList = [
-        '185.226.204.160:5713',
-        '103.210.206.26:8080',
-        '156.228.116.140:3128',
-        '122.52.141.182:8080',
-        '162.220.246.225:6509',
-        '91.185.236.24:4145'
+        "72.10.160.93:12649",
+        "103.218.24.67:58080",
+        "188.253.112.218:80",
+        "156.228.115.84:3128",
+        "58.209.137.169:8089",
+        "101.47.31.33:20000",
+        "108.170.12.11:80",
+        "18.134.236.231:1080",
+        "103.163.244.106:1080",
+        "101.47.24.160:20000",
+        "103.158.162.18:8080",
+        "3.10.93.50:3128",
+        "103.158.253.162:8199",
+        "50.174.7.156:80",
+        "104.207.40.42:3128",
+        "222.67.12.40:1080",
+        "93.184.9.9:1080",
+        "165.140.185.179:39593",
+        "49.84.134.15:8089",
+        "47.238.134.126:81",
     ];
 
     //test2
@@ -39,7 +53,7 @@ export default async function globalSetup() {
             // Si la conexión es exitosa, guardamos el proxy en el archivo .proxy-env
             fs.writeFileSync('.proxy-env', `SELECTED_PROXY=http://${selectedProxy}`);
             console.log(`✅ Proxy guardado: ${selectedProxy}`);
-            
+
         } catch (err) {
             retries++;
             console.error(`❌ Intento ${retries} de ${MAX_RETRIES}: No se pudo obtener un proxy funcional: ${err}`);
