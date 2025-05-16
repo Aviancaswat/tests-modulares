@@ -235,7 +235,7 @@ export const test = base.extend({
 
                 const getValueElement = (element: HTMLInputElement): string => {
                     let value: string | null = null;
-                    if (element.name === "email") {
+                    if (element.name === "email" || element.name === 'confirmEmail') {
                         value = getDataRandom(emailsData);
                     }
                     else if (element.name === "phone_phoneNumberId") {
@@ -250,14 +250,38 @@ export const test = base.extend({
                     return value;
                 }
 
+                const getButtonAndClickItem = () => {
+                    const listOptions = document.querySelector(".ui-dropdown_list");
+                    const buttonElement = listOptions?.querySelector(".ui-dropdown_item>button") as HTMLButtonElement;
+                    buttonElement.click();
+                }
+
                 const setValuesDefaultAutoForm = async () => {
                     const elements = document.querySelectorAll('.ui-input');
                     Array.from(elements).forEach((element) => {
+
                         if (element.tagName === "BUTTON") {
                             const elementButton = element as HTMLButtonElement;
                             elementButton.click();
                             const listOptions = document.querySelector(".ui-dropdown_list");
                             (listOptions?.querySelector(".ui-dropdown_item>button") as HTMLButtonElement).click();
+
+                            if (element.id === "passengerId") {
+                                elementButton.click();
+                                setTimeout(() => {
+                                    getButtonAndClickItem();
+                                }, 1000);
+                            }
+                            else if (element.id === 'phone_prefixPhoneId') {
+                                setTimeout(() => {
+                                    elementButton.click();
+                                    getButtonAndClickItem();
+                                }, 1000);
+                            }
+                            else {
+                                elementButton.click();
+                                getButtonAndClickItem();
+                            }
                         }
                         else if (element.tagName === "INPUT") {
                             const elementInput = element as HTMLInputElement;
