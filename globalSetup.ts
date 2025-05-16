@@ -46,7 +46,9 @@ export default async function globalSetup() {
                 throw new Error(`Proxy no funcional: ${selectedProxy}`);
             }
 
-            fs.writeFileSync('.proxy-env', `SELECTED_PROXY=http://${selectedProxy}`);
+            // fs.writeFileSync('.proxy-env', `SELECTED_PROXY=http://${selectedProxy}`);
+            fs.writeFileSync('.proxy-env', `SELECTED_PROXY=http://50.174.7.156:80`);
+
             console.log(`✅ Proxy guardado: ${selectedProxy}`);
             console.log("Proxy enviroment: ", process.env.SELECTED_PROXY);
 
