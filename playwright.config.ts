@@ -34,10 +34,9 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
+  // testDir: './no-tests',
   testDir: './tests',
-  //testDir: './tests',
   timeout: 60000,
-  reporter: 'html',
   outputDir: 'test-results',
   use: {
     headless: false,
