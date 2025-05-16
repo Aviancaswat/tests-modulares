@@ -2,7 +2,6 @@ import fs from 'fs';
 import fetch from 'node-fetch';
 
 export default async function globalSetup() {
-    // Lista de proxies predefinidos
     const proxyList = [
         "72.10.160.93:12649",
         "103.218.24.67:58080",
@@ -26,39 +25,35 @@ export default async function globalSetup() {
         "47.238.134.126:81",
     ];
 
-    //test2
-    const MAX_RETRIES = 5;
+    const MAX_RETRIES = 10;
     let retries = 0;
     let selectedProxy: string | null = null;
 
     while (retries < MAX_RETRIES && !selectedProxy) {
         try {
-            // Seleccionar un proxy aleatorio de la lista
             selectedProxy = proxyList[Math.floor(Math.random() * proxyList.length)];
 
-            // Verificar si el proxy es funcional (esto es opcional pero recomendable)
             const proxyUrl = `http://${selectedProxy}`;
-            const testUrl = 'https://httpbin.org/ip'; // URL para verificar la conexión del proxy
+            const testUrl = 'https://httpbin.org/ip'; 
 
             const res = await fetch(testUrl, {
                 method: 'GET',
                 headers: { 'Accept': 'application/json' },
-                agent: new (require('https').Agent)({ proxy: proxyUrl }) // Utilizamos el proxy para realizar la solicitud
+                agent: new (require('https').Agent)({ proxy: proxyUrl })
             });
 
             if (!res.ok) {
                 throw new Error(`Proxy no funcional: ${selectedProxy}`);
             }
 
-            // Si la conexión es exitosa, guardamos el proxy en el archivo .proxy-env
             fs.writeFileSync('.proxy-env', `SELECTED_PROXY=http://${selectedProxy}`);
             console.log(`✅ Proxy guardado: ${selectedProxy}`);
+            console.log("Proxy enviroment: ", process.env.SELECTED_PROXY);
 
         } catch (err) {
             retries++;
             console.error(`❌ Intento ${retries} de ${MAX_RETRIES}: No se pudo obtener un proxy funcional: ${err}`);
             if (retries < MAX_RETRIES) {
-                // Espera 5 segundos antes de intentar nuevamente
                 await new Promise(resolve => setTimeout(resolve, 5000));
             } else {
                 throw new Error('No se pudo obtener un proxy funcional después de varios intentos');

@@ -36,6 +36,7 @@
 
 import dotenv from 'dotenv';
 import fs from 'fs';
+import { defineConfig, devices } from '@playwright/test';
 
 if (fs.existsSync('.proxy-env')) {
   dotenv.config({ path: '.proxy-env' });
@@ -43,7 +44,7 @@ if (fs.existsSync('.proxy-env')) {
   dotenv.config(); // fallback
 }
 
-import { defineConfig, devices } from '@playwright/test';
+console.log("Proxy enviroment version 2: ", process.env.SELECTED_PROXY);
 
 export default defineConfig({
   globalSetup: require.resolve('./globalSetup'),
