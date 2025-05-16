@@ -35,5 +35,28 @@ type copysType = {
     getLang: () => Lang
 }
 
+interface GimmeProxyResponse {
+  ip: string;
+  port: number;
+  protocol: 'http' | 'https' | 'socks4' | 'socks5';
+  anonymityLevel: number; // 1 = elite, 2 = anonymous, 3 = transparent
+  supportsHttps: boolean;
+  country: string;
+  ts: number;
+  curl: string;
+  get: string;
+  post: string;
+  cookies: string;
+  referer: string;
+  userAgent: string;
+  uptime: number;
+  speed: number;
+  responseTime: number;
+  nextIp: string;
+  proxy: string;
+  error?: string;
+}
 
-export type { copysType, Lang };
+
+
+export type { copysType, Lang, GimmeProxyResponse };

@@ -62,5 +62,4 @@ const getValueElement = (element: HTMLInputElement): string => {
     return value;
 }
 
-
 export { emailsData, lastNamesData, phoneNumbersData, getDataRandom, getValueElement, userNamesData };

@@ -13,7 +13,6 @@
     "utils",
     "types",
     "data",
-    "playwright.config.ts",
-    "no-tests"
+    "playwright.config.ts"
   ]
 }

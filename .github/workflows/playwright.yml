@@ -1,10 +1,51 @@
+# name: Playwright Tests
+# on:
+#   push:
+#     branches: [ main, master ]
+#   pull_request:
+#     branches: [ main, master ]
+#   # schedule:
+#   #   - cron: '*/10 * * * *'
+#   workflow_dispatch:
+# jobs:
+#   test:
+#     timeout-minutes: 60
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v4
+#     - uses: actions/setup-node@v4
+#       with:
+#         node-version: lts/*
+#     - name: Install dependencies
+#       run: npm ci
+#     - name: Install Playwright Browsers
+#       run: npx playwright install --with-deps
+#     - name: Run Playwright tests
+#       run: npx playwright test
+#     - uses: actions/upload-artifact@v4
+#       if: ${{ !cancelled() }}
+#       with:
+#         name: playwright-report
+#         path: playwright-report/
+#         retention-days: 30
+#   # notify:
+#   #   needs: test
+#   #   if: failure()
+#   #   runs-on: ubuntu-latest
+#   #   # steps:
+#   #   #   - name: Send Teams notification
+#   #   #     run: |
+#   #   #       curl -H 'Content-Type: application/json' \
+#   #   #       -d "{\"text\": \"❌ Las pruebas de Playwright fallaron en el repositorio ${{ github.repository }} en el flujo de trabajo '${{ github.workflow }}'. 👉 [Ver ejecución](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})\"}" \
+#   #   #       https://aegisdentsunetwork.webhook.office.com/webhookb2/2477d4f6-71b7-4645-b106-c33045648dfa@6e8992ec-76d5-4ea5-8eae-b0c5e558749a/IncomingWebhook/6adc299e22d84c0b920a7eb449c2aeec/db30e4aa-7066-443e-a6b0-2de12639312e/V2vkyHROiR8t1t2q3xX1w2yJc0NBy5sPAGYyGmEzwuyss1
+
 name: Playwright Tests
 
 on:
   push:
-    branches: [ tests-fai ]
+    branches: [main, master]
   pull_request:
-    branches: [ tests-fai ]
+    branches: [main, master]
   workflow_dispatch:
 
 jobs:
@@ -13,24 +54,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+    # Paso 1: Clonar el repositorio
+    - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
+    # Paso 2: Configurar Node.js
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
 
-      - name: Install dependencies
-        run: npm ci
+    # Paso 3: Instalar dependencias
+    - name: Install dependencies
+      run: npm ci
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+    # Paso 4: Instalar los navegadores de Playwright
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
 
-      - name: Run Playwright tests in headful mode with Xvfb
-        run: xvfb-run --auto-servernum -- npx playwright test
+    # Paso 5: Establecer el Proxy
+    - name: Set Proxy for Playwright
+      run: |
+        # Obtener lista de proxies desde el repositorio de PROXY-List
+        PROXIES=$(curl https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/proxy-list-raw.txt)
+        
+        # Seleccionar un proxy aleatorio de la lista
+        PROXY=$(echo "$PROXIES" | shuf -n 1)
+        
+        echo "Usando el proxy: $PROXY"
+        
+        # Crear archivo .proxy-env y guardar la configuración del proxy
+        echo "SELECTED_PROXY=http://$PROXY" > .proxy-env
+        
+        # Mostrar contenido del archivo para verificación
+        cat .proxy-env
 
-      - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
+    # Paso 6: Ejecutar las pruebas de Playwright
+    - name: Run Playwright tests
+      run: npx playwright test
+
+    # Paso 7: Subir el reporte de las pruebas
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30

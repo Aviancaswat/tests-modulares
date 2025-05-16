@@ -3,6 +3,7 @@
 // export default defineConfig({
 //   use: {
 //     headless: false,
+//     //viewport: { width: 1280, height: 800 },
 //     viewport: { width: 1280, height: 1000 },
 //     userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
 //     locale: 'es-ES',
@@ -31,15 +32,27 @@
 //   snapshotDir: './snapshots'
 // });
 
+// pruebas en github actions
+
+import dotenv from 'dotenv';
+import fs from 'fs';
+
+if (fs.existsSync('.proxy-env')) {
+  dotenv.config({ path: '.proxy-env' });
+} else {
+  dotenv.config(); // fallback
+}
+
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  // testDir: './no-tests',
+  globalSetup: require.resolve('./globalSetup'),
   testDir: './tests',
   timeout: 60000,
+  reporter: 'html',
   outputDir: 'test-results',
   use: {
-    headless: false,
+    headless: true,
     screenshot: 'on',
     ignoreHTTPSErrors: true,
     launchOptions: {
@@ -68,61 +81,9 @@ export default defineConfig({
           'accept-language': 'es-ES,es;q=0.9',
         },
         video: 'on',
-      },
-    },
-
-    {
-      name: 'firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-        browserName: 'firefox',
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0',
-        viewport: { width: 1700, height: 1400 },
-        locale: 'es-ES',
-        extraHTTPHeaders: {
-          'accept-language': 'es-ES,es;q=0.9',
-        },
-        video: 'on',
-      },
-    },
-    {
-      name: 'webkit',
-      use: {
-        ...devices['Desktop Safari'],
-        browserName: 'webkit',
-        locale: 'es-ES',
-        extraHTTPHeaders: {
-          'accept-language': 'es-ES,es;q=0.9',
-        },
-        video: 'on',
-      },
-    },
-    {
-      name: 'Microsoft Edge',
-      use: {
-        ...devices['Desktop Edge'],
-        browserName: 'chromium',
-        channel: 'msedge',
-        viewport: { width: 1700, height: 1400 },
-        locale: 'es-ES',
-        extraHTTPHeaders: {
-          'accept-language': 'es-ES,es;q=0.9',
-        },
-        video: 'on',
-      },
-    },
-    {
-      name: 'Google Chrome',
-      use: {
-        ...devices['Desktop Chrome'],
-        browserName: 'chromium',
-        channel: 'chrome',
-        viewport: { width: 1700, height: 1400 },
-        locale: 'es-ES',
-        extraHTTPHeaders: {
-          'accept-language': 'es-ES,es;q=0.9',
-        },
-        video: 'on',
+        proxy: process.env.SELECTED_PROXY
+          ? { server: process.env.SELECTED_PROXY }
+          : undefined,
       },
     },
   ],
