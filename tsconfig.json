@@ -14,6 +14,6 @@
     "types",
     "data",
     "playwright.config.ts",
-    "no-test"
+    "no-tests"
   ]
 }
