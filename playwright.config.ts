@@ -39,10 +39,10 @@ import fs from 'fs';
 import { defineConfig, devices } from '@playwright/test';
 
 if (fs.existsSync('.proxy-env')) {
-  console.log("el file .proxy-wnv existe");
+  console.log("el file .proxy-wnv existe: ", process.env.SELECTED_PROXY);
   dotenv.config({ path: '.proxy-env' });
 } else {
-  console.log("El file .proxy-env NO EXISTE");
+  console.log("El file .proxy-env NO EXISTE: ", process.env.SELECTED_PROXY);
   dotenv.config();
 }
 
