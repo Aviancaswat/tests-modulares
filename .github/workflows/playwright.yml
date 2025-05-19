@@ -30,23 +30,6 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
 
-    # Paso 5: Establecer el Proxy
-    - name: Set Proxy for Playwright
-      run: |
-        # Obtener lista de proxies desde el repositorio de PROXY-List
-        PROXIES=$(curl https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/proxy-list-raw.txt)
-        
-        # Seleccionar un proxy aleatorio de la lista
-        PROXY=$(echo "$PROXIES" | shuf -n 1)
-        
-        echo "Usando el proxy: $PROXY"
-        
-        # Crear archivo .proxy-env y guardar la configuración del proxy
-        echo "SELECTED_PROXY=http://$PROXY" > .proxy-env
-        
-        # Mostrar contenido del archivo para verificación
-        cat .proxy-env
-
     # Paso 6: Ejecutar las pruebas de Playwright
     - name: Run Playwright tests
       run: npx playwright test
