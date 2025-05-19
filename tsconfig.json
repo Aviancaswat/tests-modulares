@@ -9,10 +9,6 @@
     "skipLibCheck": true
   },
   "include": [
-    "tests",
-    "utils",
-    "types",
-    "data",
-    "playwright.config.ts"
+    "./"
   ]
 }

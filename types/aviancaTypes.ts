@@ -35,28 +35,36 @@ type copysType = {
     getLang: () => Lang
 }
 
-interface GimmeProxyResponse {
-  ip: string;
-  port: number;
-  protocol: 'http' | 'https' | 'socks4' | 'socks5';
-  anonymityLevel: number; // 1 = elite, 2 = anonymous, 3 = transparent
-  supportsHttps: boolean;
-  country: string;
-  ts: number;
-  curl: string;
-  get: string;
-  post: string;
-  cookies: string;
-  referer: string;
-  userAgent: string;
-  uptime: number;
-  speed: number;
-  responseTime: number;
-  nextIp: string;
-  proxy: string;
-  error?: string;
+interface GeonodeProxy {
+    _id: string;
+    ip: string;
+    anonymityLevel: string;
+    asn: string;
+    city: string | null;
+    country: string;
+    created_at: string;
+    google: boolean;
+    isp: string;
+    lastChecked: number;
+    latency: number;
+    org: string;
+    port: string;
+    protocols: string[];
+    region: string | null;
+    responseTime: number;
+    speed: number;
+    updated_at: string;
+    workingPercent: number | null;
+    upTime: number;
+    upTimeSuccessCount: number;
+    upTimeTryCount: number;
 }
 
+interface GeonodeProxyResponse {
+    data: GeonodeProxy[];
+    total: number;
+    page: number;
+    limit: number;
+}
 
-
-export type { copysType, Lang, GimmeProxyResponse };
+export type { copysType, Lang, GeonodeProxy, GeonodeProxyResponse };
