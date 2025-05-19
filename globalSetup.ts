@@ -1,6 +1,6 @@
 import fs from 'fs';
 import fetch from 'node-fetch';
-import { GeonodeProxyResponse } from './types/aviancaTypes';
+import type { GeonodeProxyResponse } from './types/aviancaTypes';
 import { SocksProxyAgent} from "socks-proxy-agent";
 
 const getProxy = async (): Promise<GeonodeProxyResponse> => {

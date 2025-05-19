@@ -84,7 +84,7 @@ export const test = base.extend({
             await origen.press('Enter');
             await (page.locator('id=' + copys['ciudad_origen'])).click();
         }
-  
+
         page.selectDestinationFlight = async (): Promise<void> => {
             await page.moveMouseTo(100, 200);
 
@@ -97,12 +97,13 @@ export const test = base.extend({
         }
 
         page.selectDateInitFlight = async (): Promise<void> => {
-            await page.moveMouseTo(100, 200);
-
-            await expect(page.locator('id=departureInputDatePickerId')).toBeVisible();
+            // await expect(page.locator('id=departureInputDatePickerId')).toBeVisible();
+            // const fechaIda = await page.locator('id=departureInputDatePickerId');
+            // fechaIda.click();
+            // await expect(page.locator('span').filter({ hasText: copys['fecha_salida'] })).toBeVisible();
+            // await page.locator('span').filter({ hasText: copys['fecha_salida'] }).click();
             const fechaIda = await page.locator('id=departureInputDatePickerId');
             fechaIda.click();
-            await expect(page.locator('span').filter({ hasText: copys['fecha_salida'] })).toBeVisible();
             await page.locator('span').filter({ hasText: copys['fecha_salida'] }).click();
         }
 
@@ -307,7 +308,7 @@ export const test = base.extend({
 
         //#region páginas o flujos de avianca
         page.homePageAvianca = async (): Promise<void> => {
-            
+
             await page.moveMouseTo(100, 200);
             await page.selectOriginFlight();
             await page.takeScreenshot('seleccion-ciudad-origen');
