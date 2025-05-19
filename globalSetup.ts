@@ -1,6 +1,7 @@
 import fs from 'fs';
 import fetch from 'node-fetch';
 import { GeonodeProxyResponse } from './types/aviancaTypes';
+import { SocksProxyAgent} from "socks-proxy-agent";
 
 const getProxy = async (): Promise<GeonodeProxyResponse> => {
     const URL_PROXY = "https://proxylist.geonode.com/api/proxy-list?limit=1&page=1&sort_by=lastChecked&order=desc";
@@ -9,11 +10,10 @@ const getProxy = async (): Promise<GeonodeProxyResponse> => {
     return response;
 }
 
-const validateProxy = async (proxyUrl: string | unknown): Promise<boolean> => {
+const validateProxy = async (proxyUrl: string): Promise<boolean> => {
 
     try {
-        const HttpsProxyAgent = require('socks-proxy-agent');
-        const agent = new HttpsProxyAgent(proxyUrl);
+        const agent = new SocksProxyAgent(proxyUrl);
         const controller = new AbortController();
         const res = await fetch('https://ifconfig.me/ip', { agent, signal: controller.signal });
         const body = await res.text();
