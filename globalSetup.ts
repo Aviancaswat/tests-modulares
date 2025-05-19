@@ -41,7 +41,6 @@ export default async function globalSetup() {
         selectedProxy = `${dataProxy.protocols[0]}://${dataProxy.ip}:${dataProxy.port}`;
 
         const validateProxyResult = await validateProxy(selectedProxy);
-        console.log("Validate proxy result: ", validateProxy);
 
         if(validateProxyResult) {
             fs.writeFileSync('.proxy-env', `SELECTED_PROXY=${selectedProxy}`);

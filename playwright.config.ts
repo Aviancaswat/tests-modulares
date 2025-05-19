@@ -48,7 +48,7 @@ if (fs.existsSync('.proxy-env')) {
 console.log("Proxy enviroment version 2: ", process.env.SELECTED_PROXY);
 
 export default defineConfig({
-  globalSetup: require.resolve('./globalSetup'),
+  //globalSetup: require.resolve('./globalSetup'),
   testDir: './tests',
   timeout: 60000,
   reporter: 'html',
@@ -83,9 +83,9 @@ export default defineConfig({
           'accept-language': 'es-ES,es;q=0.9',
         },
         video: 'on',
-        proxy: process.env.SELECTED_PROXY
-          ? { server: process.env.SELECTED_PROXY }
-          : undefined,
+        proxy: {
+          server: 'socks4://187.157.30.202:4153'
+        }
       },
     },
   ],
