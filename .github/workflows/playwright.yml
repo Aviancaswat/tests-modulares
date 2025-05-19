@@ -1,4 +1,47 @@
 
+# name: Playwright Tests
+
+# on:
+#   push:
+#     branches: [tests-fai]
+#   pull_request:
+#     branches: [tests-fai]
+#   workflow_dispatch:
+
+# jobs:
+#   test:
+#     timeout-minutes: 60
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     # Paso 1: Clonar el repositorio
+#     - uses: actions/checkout@v4
+
+#     # Paso 2: Configurar Node.js
+#     - uses: actions/setup-node@v4
+#       with:
+#         node-version: lts/*
+
+#     # Paso 3: Instalar dependencias
+#     - name: Install dependencies
+#       run: npm ci
+
+#     # Paso 4: Instalar los navegadores de Playwright
+#     - name: Install Playwright Browsers
+#       run: npx playwright install --with-deps
+
+#     # Paso 6: Ejecutar las pruebas de Playwright
+#     - name: Run Playwright tests
+#       run: npx playwright test
+
+#     # Paso 7: Subir el reporte de las pruebas
+#     - uses: actions/upload-artifact@v4
+#       if: ${{ !cancelled() }}
+#       with:
+#         name: playwright-report
+#         path: playwright-report/
+#         retention-days: 30
+
 name: Playwright Tests
 
 on:
@@ -14,30 +57,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Paso 1: Clonar el repositorio
-    - uses: actions/checkout@v4
+      # Paso 1: Clonar el repositorio
+      - uses: actions/checkout@v4
 
-    # Paso 2: Configurar Node.js
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
+      # Paso 2: Configurar Node.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
 
-    # Paso 3: Instalar dependencias
-    - name: Install dependencies
-      run: npm ci
+      # Paso 3: Cachear node_modules para acelerar builds
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-    # Paso 4: Instalar los navegadores de Playwright
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      # Paso 4: Instalar dependencias
+      - name: Install dependencies
+        run: npm ci
 
-    # Paso 6: Ejecutar las pruebas de Playwright
-    - name: Run Playwright tests
-      run: npx playwright test
+      # Paso 5: Instalar los navegadores de Playwright
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
 
-    # Paso 7: Subir el reporte de las pruebas
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+      # Paso 6: Ejecutar las pruebas de Playwright
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      # Paso 7: Subir el reporte de las pruebas (fallidas o exitosas)
+      - name: Upload Playwright HTML report
+        if: always()  # Se ejecuta aunque falle el test
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
